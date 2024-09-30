@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        body
+        {
+            position: sticky;
+            margin: 0;
+            
+            box-sizing: border-box;
+        }
+        .box {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            box-sizing: border-box;
+            border:solid #333 2px;
+            overflow: auto;
+           
+           
+            margin-bottom: 20px;
+            
+        }
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            position: relative;
+        }
+        .header a {
+            color: white;
+            margin: 0 20px;
+            text-decoration: none;
+        }
+        .header .logout {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+        }
+        .header .admin-name {
+            position: absolute;
+            right: 120px;
+            top: 10px;
+            color: white;
+        }
+        .panel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 60px);
+        }
+        .content {
+            text-align: center;
+            width: 80%;
+        }
+        .content h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .table-container {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        .table-container button {
+            float: right;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .search-container {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .search-container input {
+            padding: 5px;
+            width: 200px;
+        }
+        .create-employee-top {
+            
+            right: 20px;
+            top: 70px;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .create-employee-top:hover {
+            background-color: #555;
+            
+        }
+        .create-form form {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .create-form label {
+            display: block;
+            margin-top: 10px;
+        }
+        .create-form input[type="text"],
+        .create-form input[type="email"],
+        .create-form select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        .create-form input[type="radio"],
+        .create-form input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        .create-form button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            
+        }
+        .create-form button:hover {
+            background-color: #555;
+        }
+        .create-form img {
+            display: block;
+            margin-top: 10px;
+            max-width: 100px;
+            height: auto;
+        }
+        #employee-count {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        #formTitle{
+           
+            padding-top: 80px;
+        }
+        #CreateEmployeeButton{
+            padding-top: 10px;
+        }
+       
+     .create-form{
+        margin-top: 20px;
+        padding-bottom: 10%;
+     }
+     #employeeCreate{
+        padding: auto;
+     }
+       
+
+    </style>
+</head>
+<body>
+    
+
+    <div class="box">
+
+        <div style="position: static;"><img src="" alt="logo"></div>
+        <div class="header">
+            <a href="javascript:void(0)" onclick="showSection('home')">Home</a>
+            <a href="javascript:void(0)" onclick="showSection('employeeList')">Employee List</a>
+            <span class="admin-name" id="adminName">Admin</span>
+            <a href="javascript:void(0)" class="logout" onclick="logout()">Logout</a>
+        </div>
+    
+        <div id="CreateEmployeeButton">
+
+            
+        <button class="create-employee-top" onclick="showSection('employeeCreate')">Create Employee</button>
+    
+        </div>
+        
+    
+        <div class="panel">
+            <div class="content">
+                <!-- Home Section -->
+                <div id="home" class="home-section">
+                    <h2>Welcome to Admin Panel</h2>
+                    <p>Manage employees and other settings from here.</p>
+                </div>
+    
+                <!-- Employee List Section -->
+                <div id="employeeList" class="employee-table" style="display: none;">
+                    
+                    <h2>Employee List</h2>
+    
+                    <p id="employee-count">Total Employees: 0</p>
+    
+                    <div class="search-container">
+                        <input type="text" id="searchBar" placeholder="Search employee by name..." onkeyup="filterEmployees()">
+                    </div>
+                    <div class="table-container">
+                        <table id="employeeTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile</th>
+                                    <th>Designation</th>
+                                    <th>Gender</th>
+                                    <th>Courses</th>
+                                    <th>Creation Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+    
+                <!-- Create Employee Section -->
+                <div id="employeeCreate" class="create-form" style="display: none;">
+                    <h2 id="formTitle">Create Employee</h2>
+                    <form onsubmit="createOrUpdateEmployee(event)">
+                        <input type="hidden" id="employeeId">
+    
+                        <label for="empName">Name:</label>
+                        <input type="text" id="empName" placeholder="Enter employee name" required>
+    
+                        <label for="empEmail">Email:</label>
+                        <input type="email" id="empEmail" placeholder="Enter employee email" required>
+    
+                        <label for="empMobile">Mobile:</label>
+                        <input type="text" id="empMobile" placeholder="Enter employee mobile number" required>
+    
+                        <label for="empDesignation">Designation:</label>
+                        <select id="empDesignation" required>
+                            <option value="">--Select Designation--</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Manager">Manager</option>
+                            <option value="HR">HR</option>
+                        </select>
+    
+                        <label>Gender:</label>
+                        <input type="radio" name="gender" value="Male" required> Male
+                        <input type="radio" name="gender" value="Female" required> Female
+    
+                        <label>Courses:</label>
+                        <input type="checkbox" name="course" value="MCA"> MCA
+                        <input type="checkbox" name="course" value="BCA"> BCA
+                        <input type="checkbox" name="course" value="BSC"> BSC
+    
+                        <label for="empImage">Upload Image (jpg/png):</label>
+                        <input type="file" id="empImage" accept="image/png, image/jpeg" required onchange="showImagePreview(event)">
+    
+                        <img id="imagePreview" src="" alt="Current Image" width="100" style="display: none;">
+    
+                        <button type="submit" id="submitBtn">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+ 
+</body>
+</html>
+<script src="script.js"></script>
